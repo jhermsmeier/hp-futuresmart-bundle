@@ -165,7 +165,12 @@ async function extractBundle( filename, targetDir, handle ) {
 
   await bdl.readHeader()
   await bdl.readEntries()
-  await bdl.extractPackages( targetDir )
+
+  if( argv.includes( '--pkg' ) || argv.includes( '-p' ) ) {
+    await bdl.extractPackages( targetDir )
+  } else {
+    await bdl.extract( targetDir )
+  }
 
   console.log( 'Done' )
 
