@@ -8,6 +8,7 @@ async function main() {
     await bdl.open()
     await bdl.readHeader()
     await bdl.readEntries()
+    await bdl.readSignature()
     console.log( bdl )
   } finally {
     await bdl.close()
