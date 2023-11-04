@@ -1,10 +1,18 @@
 {
   "name": "hp-firmware-bundle",
   "version": "1.0.0",
-  "description": "",
+  "description": "Hewlett-Packard Firmware Bundle Tool",
   "author": "Jonas Hermsmeier <jhermsmeier@gmail.com> (https://jhermsmeier.de)",
   "license": "MIT",
-  "keywords": [],
+  "keywords": [
+    "hp",
+    "hewlett-packard",
+    "firmware",
+    "bundle",
+    "package",
+    "extract",
+    "unpack"
+  ],
   "main": "lib/bundle.js",
   "bin": {
     "hp-bdl": "bin/hp-bdl"
