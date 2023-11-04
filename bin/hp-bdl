@@ -1,0 +1,133 @@
+#!/usr/bin/env node
+const argv = process.argv.slice( 2 )
+
+const USAGE = `
+HP Firmware Bundle Tool
+
+  Usage: hp-bdl [command] [options]
+
+  Options:
+    -h, --help ..................... Display this usage help
+    -v, --version .................. Print the tool version
+
+  Commands:
+    help ........................... Display this usage help
+    inspect <path> ................. Show bundle or package information & contents
+    extract <path> [target-dir] .... Unpack bundle or package into target directory
+`
+
+const command = argv[0]
+
+if( argv.includes( '-v' ) || argv.includes( '--version' ) ) {
+  console.log( require( '../package.json' ).version )
+  process.exit( 0 )
+}
+
+const shouldHelp = argv.length == 0 ||
+  argv.includes( '--help' ) ||
+  argv.includes( '-h' ) ||
+  command == 'help'
+
+if( shouldHelp ) {
+  process.stdout.write( USAGE )
+  process.exit( 0 )
+}
+
+function panic( error ) {
+  console.error( '[ERROR]:', error.message )
+  process.exit( 1 )
+}
+
+process.on( 'uncaughtException', panic )
+process.on( 'uncaughtRejection', panic )
+
+const fsp = require( 'node:fs/promises' )
+const path = require( 'node:path' )
+const ANSI = require( '../cli/ansi' )
+const bytes = require( '../cli/bytes' )
+const Bundle = require( '..' )
+
+async function inspect( filename ) {
+
+  const handle = await fsp.open( filename )
+
+  const buffer = Buffer.alloc( 4 )
+  await handle.read( buffer, 0, buffer.length, 0 )
+
+  try {
+    switch( buffer.readUInt32LE( 0 ) ) {
+      case Bundle.ID: await inspectBundle( filename, handle ); break
+      case Package.ID: await inspectPackage( filename, handle ); break
+      default: throw new Error( 'Unknown or invalid firmware bundle or package' )
+    }
+  } catch( error ) {
+    console.error( '[ERROR]:', error.message )
+  } finally {
+    await handle.close()
+  }
+
+}
+
+async function inspectBundle( filename, handle ) {
+
+  const bdl = new Bundle({ path: filename, handle })
+  await bdl.readHeader()
+
+  const timestamp = bdl.timestamp.toLocaleString( 'en-gb', {
+    dateStyle: 'medium',
+    timeStyle: 'long',
+  })
+
+  process.stdout.write(`
+${ ANSI.bold( 'Name' ) }: ${ bdl.name }
+${ ANSI.bold( 'Release' ) }: ${ bdl.release }
+${ ANSI.bold( 'Vendor' ) }: ${ bdl.vendor }
+
+${ ANSI.bold( 'File Format Version' ) }: ${ bdl.version.major }.${ bdl.version.minor }
+${ ANSI.bold( 'Timestamp' ) }: ${ timestamp }
+`)
+
+  await bdl.readEntries()
+
+  if( bdl.packages.length == 0 ) {
+    process.stdout.write( '\nPackages: None\n' )
+    return
+  }
+
+  const packages = []
+
+  const treeStart = ANSI.gray( '╷' )
+  const treeBranch = ANSI.gray( '├──' )
+  const treeEnd = ANSI.gray( '└──' )
+
+  process.stdout.write( `\n${ ANSI.bold( 'Packages' ) }:\n` )
+
+  for( let i = 0; i < bdl.packages.length; i++ ) {
+
+    let entry = bdl.packages[i]
+    let pkg = new Bundle.Package({
+      handle: bdl.handle,
+      offset: entry.offset,
+    })
+
+    await pkg.readHeader()
+    await pkg.readEntries()
+
+    process.stdout.write( `\n  ${ ANSI.bold( pkg.name ) } ` )
+    process.stdout.write( ANSI.gray( `${ pkg.release } ${ ANSI.italic( `(${ pkg.vendor })` ) } – ${ bytes.format( entry.length ) }` ) )
+    process.stdout.write( `\n   ${ treeStart }\n` )
+
+    for( let i = 0; i < pkg.files.length; i++ ) {
+      let file = pkg.files[i]
+      let branch = i == pkg.files.length - 1 ? treeEnd : treeBranch
+      process.stdout.write( `   ${ branch } ${ file.name } ${ ANSI.gray( '– ' + bytes.format( file.length ) ) }\n` )
+    }
+
+  }
+
+}
+
+switch( command ) {
+  case 'inspect': inspect( argv[1] ); break
+  case 'extract': extract( argv[1], argv[2] ); break
+}
