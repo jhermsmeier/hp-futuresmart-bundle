@@ -61,7 +61,7 @@ async function inspect( filename ) {
       default: throw new Error( 'Unknown or invalid firmware bundle or package' )
     }
   } catch( error ) {
-    console.error( '[ERROR]:', error.message )
+    console.error( ANSI.lightRed( '[ERROR]:' ), error.message )
   } finally {
     await handle.close()
   }
@@ -133,6 +133,53 @@ ${ ANSI.bold( 'Timestamp' ) }: ${ timestamp }
     }
 
   }
+
+}
+
+async function inspectPackage( filename, handle ) {}
+
+async function extract( filename, targetDir ) {
+
+  const handle = await fsp.open( filename )
+
+  const buffer = Buffer.alloc( 4 )
+  await handle.read( buffer, 0, buffer.length, 0 )
+
+  try {
+    switch( buffer.readUInt32LE( 0 ) ) {
+      case Bundle.ID: await extractBundle( filename, targetDir, handle ); break
+      case Package.ID: await extractPackage( filename, targetDir, handle ); break
+      default: throw new Error( 'Unknown or invalid firmware bundle or package' )
+    }
+  } catch( error ) {
+    console.error( ANSI.lightRed( '[ERROR]:' ), error.message )
+  } finally {
+    await handle.close()
+  }
+
+}
+
+async function extractBundle( filename, targetDir, handle ) {
+
+  const bdl = new Bundle({ path: filename, handle })
+
+  await bdl.readHeader()
+  await bdl.readEntries()
+  await bdl.extractPackages( targetDir )
+
+  console.log( 'Done' )
+
+}
+
+async function extractPackage( filename, targetDir, handle ) {
+
+  const pkg = new Bundle.Package({ path: filename, handle })
+
+  await pkg.readHeader()
+  await pkg.readEntries()
+  await pkg.extract( targetDir )
+
+  console.log( 'Done' )
 
 }
 
