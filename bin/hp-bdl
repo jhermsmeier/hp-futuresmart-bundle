@@ -105,9 +105,8 @@ ${ ANSI.bold( 'Timestamp' ) }: ${ timestamp }
 
   const packages = []
 
-  const treeStart = ANSI.gray( '╷' )
-  const treeBranch = ANSI.gray( '├──' )
-  const treeEnd = ANSI.gray( '└──' )
+  const treeBranch = ANSI.gray( '├┄┄' )
+  const treeEnd = ANSI.gray( '└┄┄' )
 
   process.stdout.write( `\n${ ANSI.bold( 'Packages' ) }:\n` )
 
@@ -124,7 +123,7 @@ ${ ANSI.bold( 'Timestamp' ) }: ${ timestamp }
 
     process.stdout.write( `\n  ${ ANSI.bold( pkg.name ) } ` )
     process.stdout.write( ANSI.gray( `${ pkg.release } ${ ANSI.italic( `(${ pkg.vendor })` ) } – ${ bytes.format( entry.length ) }` ) )
-    process.stdout.write( `\n   ${ treeStart }\n` )
+    process.stdout.write( '\n\n' )
 
     for( let i = 0; i < pkg.files.length; i++ ) {
       let file = pkg.files[i]
@@ -138,6 +137,7 @@ ${ ANSI.bold( 'Timestamp' ) }: ${ timestamp }
 
 async function inspectPackage( filename, handle ) {
 
+  const stats = await handle.stat()
   const pkg = new Bundle.Package({ path: filename, handle })
 
   await pkg.readHeader()
@@ -157,15 +157,15 @@ ${ ANSI.bold( 'File Format Version' ) }: ${ pkg.version.major }.${ pkg.version.m
 ${ ANSI.bold( 'Timestamp' ) }: ${ timestamp }
 `)
 
-  const treeStart = ANSI.gray( '╷' )
-  const treeBranch = ANSI.gray( '├──' )
-  const treeEnd = ANSI.gray( '└──' )
+  const treeBranch = ANSI.gray( '├┄┄' )
+  const treeEnd = ANSI.gray( '└┄┄' )
 
-  process.stdout.write( `\n${ ANSI.bold( 'Files' ) }:\n` )
+  process.stdout.write( `\n${ ANSI.bold( 'Size' ) }: ${ bytes.format( stats.size ) }` )
+  process.stdout.write( `\n${ ANSI.bold( 'Files' ) }:\n\n` )
 
   for( let i = 0; i < pkg.files.length; i++ ) {
     let file = pkg.files[i]
-    let branch = i == pkg.files.length - 1 ? treeEnd : treeBranch
+    let branch = ( i == pkg.files.length - 1 ) ? treeEnd : treeBranch
     process.stdout.write( ` ${ branch } ${ file.name } ${ ANSI.gray( '– ' + bytes.format( file.length ) ) }\n` )
   }
 
