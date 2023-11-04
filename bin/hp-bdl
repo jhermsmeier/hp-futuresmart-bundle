@@ -94,6 +94,15 @@ ${ ANSI.bold( 'Timestamp' ) }: ${ timestamp }
     return
   }
 
+  await bdl.readSignature()
+
+  if( bdl.signature != null ) {
+    process.stdout.write( '\n' )
+    process.stdout.write( `${ ANSI.bold( 'Signing Key' ) }: ${ bdl.signature.key }\n` )
+    process.stdout.write( `${ ANSI.bold( 'Hash' ) }: ${ bdl.signature.hash }\n` )
+    process.stdout.write( `${ ANSI.bold( 'Signature' ) }: ${ bdl.signature.digest }\n` )
+  }
+
   const packages = []
 
   const treeStart = ANSI.gray( '╷' )
