@@ -8,7 +8,7 @@ async function main() {
   const filename = argv[0]
   const targetDir = argv[1]
 
-  const bdl = new Bundle({ filename })
+  const bdl = new Bundle({ path: filename })
 
   try {
     await bdl.open()
