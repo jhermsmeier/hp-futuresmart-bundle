@@ -74,7 +74,7 @@ async function inspectBundle( filename, handle ) {
   const bdl = new Bundle({ path: filename, handle })
   await bdl.readHeader()
 
-  const timestamp = bdl.timestamp.toLocaleString( 'en-gb', {
+  const dateCode = bdl.dateCode.toLocaleString( 'en-gb', {
     dateStyle: 'medium',
     timeStyle: 'long',
   })
@@ -88,7 +88,7 @@ ${ ANSI.bold( 'FutureSmart Version' ) }: ${ bdl.futureSmartVersion }
 ${ ANSI.bold( 'Model Code' ) }: ${ bdl.modelCode }
 
 ${ ANSI.bold( 'File Format Version' ) }: ${ bdl.version.major }.${ bdl.version.minor }
-${ ANSI.bold( 'Timestamp' ) }: ${ timestamp }
+${ ANSI.bold( 'Date Code' ) }: ${ dateCode }
 `)
 
   await bdl.readEntries()
@@ -147,7 +147,7 @@ async function inspectPackage( filename, handle ) {
   await pkg.readHeader()
   await pkg.readEntries()
 
-  const timestamp = pkg.timestamp.toLocaleString( 'en-gb', {
+  const dateCode = pkg.dateCode.toLocaleString( 'en-gb', {
     dateStyle: 'medium',
     timeStyle: 'long',
   })
@@ -159,7 +159,7 @@ ${ ANSI.bold( 'Vendor' ) }: ${ pkg.vendor }
 ${ ANSI.bold( 'Subsystem' ) }: ${ pkg.uuid }
 
 ${ ANSI.bold( 'File Format Version' ) }: ${ pkg.version.major }.${ pkg.version.minor }
-${ ANSI.bold( 'Timestamp' ) }: ${ timestamp }
+${ ANSI.bold( 'Date Code' ) }: ${ dateCode }
 `)
 
   const treeBranch = ANSI.gray( '├┄┄' )
