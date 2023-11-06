@@ -153,6 +153,7 @@ async function inspectPackage( filename, handle ) {
 ${ ANSI.bold( 'Package Name' ) }: ${ pkg.name }
 ${ ANSI.bold( 'Release' ) }: ${ pkg.release }
 ${ ANSI.bold( 'Vendor' ) }: ${ pkg.vendor }
+${ ANSI.bold( 'Subsystem' ) }: ${ pkg.uuid }
 
 ${ ANSI.bold( 'File Format Version' ) }: ${ pkg.version.major }.${ pkg.version.minor }
 ${ ANSI.bold( 'Timestamp' ) }: ${ timestamp }
