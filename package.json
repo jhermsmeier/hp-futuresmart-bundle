@@ -26,6 +26,7 @@
     "url": "https://github.com/jhermsmeier/hp-firmware-bundle/issues"
   },
   "scripts": {},
-  "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {
+    "cyclic-32": "1.2.0"
+  }
 }
