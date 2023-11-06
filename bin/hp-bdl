@@ -84,6 +84,9 @@ ${ ANSI.bold( 'Bundle Name' ) }: ${ bdl.name }
 ${ ANSI.bold( 'Release' ) }: ${ bdl.release }
 ${ ANSI.bold( 'Vendor' ) }: ${ bdl.vendor }
 
+${ ANSI.bold( 'FutureSmart Version' ) }: ${ bdl.futureSmartVersion }
+${ ANSI.bold( 'Model Code' ) }: ${ bdl.modelCode }
+
 ${ ANSI.bold( 'File Format Version' ) }: ${ bdl.version.major }.${ bdl.version.minor }
 ${ ANSI.bold( 'Timestamp' ) }: ${ timestamp }
 `)
