@@ -2,6 +2,7 @@
 
 /node_modules
 /benchmark/*.txt
+/test/data
 
 !.editorconfig
 !.github
