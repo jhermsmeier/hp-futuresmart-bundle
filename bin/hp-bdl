@@ -16,7 +16,8 @@ HP Firmware Bundle Tool
     extract <path> [target-dir] .... Unpack bundle or package into target directory
 `
 
-const command = argv[0]
+const options = argv.filter( arg => arg.startsWith( '-' ) )
+const command = argv.filter( arg => !arg.startsWith( '-' ) )
 
 if( argv.includes( '-v' ) || argv.includes( '--version' ) ) {
   console.log( require( '../package.json' ).version )
@@ -221,7 +222,11 @@ async function extractPackage( filename, targetDir, handle ) {
 
 }
 
-switch( command ) {
-  case 'inspect': inspect( argv[1] ); break
-  case 'extract': extract( argv[1], argv[2] ); break
+switch( command[0] ) {
+  case 'inspect': inspect( command[1] ); break
+  case 'extract': extract( command[1], command[2] ); break
+  default:
+    process.stderr.write( USAGE )
+    process.exit( 1 )
+    break
 }
