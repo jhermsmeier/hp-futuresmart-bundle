@@ -1,4 +1,6 @@
 .*
 /benchmark
+/doc
 /example
+/images
 /test
