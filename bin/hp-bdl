@@ -2,7 +2,7 @@
 const argv = process.argv.slice( 2 )
 
 const USAGE = `
-HP Firmware Bundle Tool
+HP FutureSmart Firmware Bundle Tool
 
   Usage: hp-bdl [command] [options]
 
@@ -14,6 +14,10 @@ HP Firmware Bundle Tool
     help ........................... Display this usage help
     inspect <path> ................. Show bundle or package information & contents
     extract <path> [target-dir] .... Unpack bundle or package into target directory
+
+  Command Options:
+    extract
+      -p, --pkg .................... Unpack the bundle into its package files
 `
 
 const options = argv.filter( arg => arg.startsWith( '-' ) )
