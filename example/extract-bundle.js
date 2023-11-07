@@ -9,9 +9,9 @@ async function main() {
   const targetDir = argv[1]
 
   const bdl = new Bundle({ path: filename })
+  await bdl.open()
 
   try {
-    await bdl.open()
     await bdl.readHeader()
     await bdl.readEntries()
     await bdl.extract( targetDir )

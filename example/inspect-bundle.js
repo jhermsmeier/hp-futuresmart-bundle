@@ -5,9 +5,9 @@ const argv = process.argv.slice( 2 )
 async function main() {
 
   const bdl = new Bundle({ path: argv[0] })
+  await bdl.open()
 
   try {
-    await bdl.open()
     await bdl.readHeader()
     await bdl.readEntries()
     await bdl.readSignature()

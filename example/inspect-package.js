@@ -5,9 +5,9 @@ const argv = process.argv.slice( 2 )
 async function main() {
 
   const pkg = new Bundle.Package({ path: argv[0] })
+  await pkg.open()
 
   try {
-    await pkg.open()
     await pkg.readHeader()
     await pkg.readEntries()
     console.log( pkg )
