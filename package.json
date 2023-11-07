@@ -1,5 +1,5 @@
 {
-  "name": "hp-firmware-bundle",
+  "name": "hp-futuresmart-bundle",
   "version": "1.0.0",
   "description": "Hewlett-Packard Firmware Bundle Tool",
   "author": "Jonas Hermsmeier <jhermsmeier@gmail.com> (https://jhermsmeier.de)",
@@ -7,6 +7,7 @@
   "keywords": [
     "hp",
     "hewlett-packard",
+    "futuresmart",
     "firmware",
     "bundle",
     "package",
@@ -17,13 +18,13 @@
   "bin": {
     "hp-bdl": "bin/hp-bdl"
   },
-  "homepage": "https://github.com/jhermsmeier/hp-firmware-bundle#readme",
+  "homepage": "https://github.com/jhermsmeier/hp-futuresmart-bundle#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jhermsmeier/hp-firmware-bundle.git"
+    "url": "git+https://github.com/jhermsmeier/hp-futuresmart-bundle.git"
   },
   "bugs": {
-    "url": "https://github.com/jhermsmeier/hp-firmware-bundle/issues"
+    "url": "https://github.com/jhermsmeier/hp-futuresmart-bundle/issues"
   },
   "scripts": {},
   "dependencies": {
